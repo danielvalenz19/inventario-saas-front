@@ -61,9 +61,11 @@ export function ProfitsReport() {
                   <Tooltip
                     formatter={(value: number) => [`${value}%`, "Margen"]}
                     contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      borderColor: "hsl(var(--border))",
+                      backgroundColor: "var(--card)",
+                      borderColor: "var(--border)",
+                      boxShadow: "0 18px 40px rgba(15, 23, 42, 0.15)",
                       borderRadius: "8px",
+                      color: "var(--foreground)",
                     }}
                   />
                   <Bar dataKey="margen" radius={[0, 4, 4, 0]}>

@@ -52,15 +52,15 @@ export function SalesChart() {
                   <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="oklch(var(--border))" strokeOpacity={0.5} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.5} />
               <XAxis
                 dataKey="day"
-                tick={{ fontSize: 12, fill: "oklch(var(--muted-foreground))" }}
+                tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 12, fill: "oklch(var(--muted-foreground))" }}
+                tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `Q${value / 1000}k`}
@@ -68,12 +68,13 @@ export function SalesChart() {
               <Tooltip
                 formatter={(value: number) => [`Q ${value.toLocaleString()}`, "Ventas"]}
                 contentStyle={{
-                  backgroundColor: "oklch(var(--card))",
-                  borderColor: "oklch(var(--border))",
+                  backgroundColor: "var(--card)",
+                  borderColor: "var(--border)",
+                  boxShadow: "0 18px 40px rgba(15, 23, 42, 0.15)",
                   borderRadius: "var(--radius)",
-                  color: "oklch(var(--foreground))",
+                  color: "var(--foreground)",
                 }}
-                labelStyle={{ color: "oklch(var(--foreground))" }}
+                labelStyle={{ color: "var(--foreground)" }}
               />
               <Area type="monotone" dataKey="ventas" stroke="#f59e0b" strokeWidth={2} fill="url(#salesGradient)" />
             </AreaChart>

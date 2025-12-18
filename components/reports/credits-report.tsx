@@ -60,9 +60,11 @@ export function CreditsReport() {
                     name === "porCobrar" ? "Por Cobrar" : "Por Pagar",
                   ]}
                   contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
+                    backgroundColor: "var(--card)",
+                    borderColor: "var(--border)",
+                    boxShadow: "0 18px 40px rgba(15, 23, 42, 0.15)",
                     borderRadius: "8px",
+                    color: "var(--foreground)",
                   }}
                 />
                 <Legend

@@ -55,10 +55,12 @@ export function ProductRotationChart() {
                   <Tooltip
                     formatter={(value: number) => [`${value} unidades`, "Ventas"]}
                     contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      borderColor: "hsl(var(--border))",
+                      backgroundColor: "var(--card)",
+                      borderColor: "var(--border)",
+                      boxShadow: "0 18px 40px rgba(15, 23, 42, 0.15)",
                       borderRadius: "8px",
                       fontSize: 12,
+                      color: "var(--foreground)",
                     }}
                   />
                   <Bar dataKey="ventas" radius={[0, 4, 4, 0]}>
@@ -95,10 +97,12 @@ export function ProductRotationChart() {
                   <Tooltip
                     formatter={(value: number) => [`${value} unidades`, "Ventas"]}
                     contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      borderColor: "hsl(var(--border))",
+                      backgroundColor: "var(--card)",
+                      borderColor: "var(--border)",
+                      boxShadow: "0 18px 40px rgba(15, 23, 42, 0.15)",
                       borderRadius: "8px",
                       fontSize: 12,
+                      color: "var(--foreground)",
                     }}
                   />
                   <Bar dataKey="ventas" radius={[0, 4, 4, 0]}>

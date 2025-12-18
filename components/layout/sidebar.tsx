@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 
 const menuItems = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Inventario", href: "/inventario", icon: Package },
   { name: "Créditos Clientes", href: "/creditos-clientes", icon: Users },
   { name: "Créditos Proveedores", href: "/creditos-proveedores", icon: Building2 },

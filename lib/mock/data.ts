@@ -1,0 +1,398 @@
+import type {
+  CreditRecord,
+  DailyMetric,
+  DebtRecord,
+  InventoryItem,
+  ProductPerformance,
+  ReportTransaction,
+} from "@/types/reporting"
+
+const BRANCHES = [1, 2, 3]
+
+const formatDate = (date: Date) => date.toISOString().split("T")[0]
+
+const today = new Date()
+const lastThirtyDays = Array.from({ length: 30 }, (_, index) => {
+  const d = new Date(today)
+  d.setDate(d.getDate() - (29 - index))
+  return d
+})
+
+export const dailyMetrics: DailyMetric[] = lastThirtyDays.flatMap((date, index) => {
+  const dayFactor = 0.85 + index * 0.015
+  return BRANCHES.map((sucursalId) => {
+    const ventas = Math.round(15000 * dayFactor + sucursalId * 900)
+    const compras = Math.round(9000 * dayFactor + sucursalId * 600)
+    const utilidad = Math.round(ventas * 0.32 - sucursalId * 150)
+    return {
+      date: formatDate(date),
+      sucursalId,
+      ventas,
+      compras,
+      utilidad,
+    }
+  })
+})
+
+export const productPerformance: ProductPerformance[] = [
+  {
+    id: "prd-001",
+    nombre: "Arroz Premium 25kg",
+    categoria: "Granos",
+    sucursalId: 1,
+    ventas: 86500,
+    unidadesVendidas: 410,
+    stockActual: 68,
+    stockMinimo: 50,
+  },
+  {
+    id: "prd-002",
+    nombre: "Aceite Vegetal 20L",
+    categoria: "Aceites",
+    sucursalId: 1,
+    ventas: 73500,
+    unidadesVendidas: 350,
+    stockActual: 42,
+    stockMinimo: 35,
+  },
+  {
+    id: "prd-003",
+    nombre: "Frijol Negro 46kg",
+    categoria: "Granos",
+    sucursalId: 2,
+    ventas: 68200,
+    unidadesVendidas: 300,
+    stockActual: 33,
+    stockMinimo: 45,
+  },
+  {
+    id: "prd-004",
+    nombre: "Azúcar Refinada 50kg",
+    categoria: "Endulzantes",
+    sucursalId: 2,
+    ventas: 71200,
+    unidadesVendidas: 280,
+    stockActual: 24,
+    stockMinimo: 35,
+  },
+  {
+    id: "prd-005",
+    nombre: "Harina Trigo 50kg",
+    categoria: "Harinas",
+    sucursalId: 3,
+    ventas: 59800,
+    unidadesVendidas: 245,
+    stockActual: 71,
+    stockMinimo: 55,
+  },
+  {
+    id: "prd-006",
+    nombre: "Leche Descremada 12u",
+    categoria: "Lácteos",
+    sucursalId: 3,
+    ventas: 64200,
+    unidadesVendidas: 320,
+    stockActual: 34,
+    stockMinimo: 40,
+  },
+]
+
+export const inventoryItems: InventoryItem[] = [
+  {
+    id: "inv-001",
+    sku: "ARZ-25",
+    producto: "Arroz Premium 25kg",
+    categoria: "Granos",
+    sucursalId: 1,
+    stock: 68,
+    minimo: 50,
+    rotacion: "alta",
+  },
+  {
+    id: "inv-002",
+    sku: "ACE-20",
+    producto: "Aceite Vegetal 20L",
+    categoria: "Aceites",
+    sucursalId: 1,
+    stock: 42,
+    minimo: 35,
+    rotacion: "media",
+  },
+  {
+    id: "inv-003",
+    sku: "FRJ-46",
+    producto: "Frijol Negro 46kg",
+    categoria: "Granos",
+    sucursalId: 2,
+    stock: 33,
+    minimo: 45,
+    rotacion: "alta",
+  },
+  {
+    id: "inv-004",
+    sku: "AZU-50",
+    producto: "Azúcar Refinada 50kg",
+    categoria: "Endulzantes",
+    sucursalId: 2,
+    stock: 24,
+    minimo: 35,
+    rotacion: "media",
+  },
+  {
+    id: "inv-005",
+    sku: "HAR-50",
+    producto: "Harina de Trigo 50kg",
+    categoria: "Harinas",
+    sucursalId: 3,
+    stock: 71,
+    minimo: 55,
+    rotacion: "alta",
+  },
+  {
+    id: "inv-006",
+    sku: "LEC-12",
+    producto: "Leche Descremada 12u",
+    categoria: "Lácteos",
+    sucursalId: 3,
+    stock: 34,
+    minimo: 40,
+    rotacion: "baja",
+  },
+  {
+    id: "inv-007",
+    sku: "CAF-01",
+    producto: "Café Gourmet 1kg",
+    categoria: "Bebidas",
+    sucursalId: 1,
+    stock: 15,
+    minimo: 30,
+    rotacion: "media",
+  },
+  {
+    id: "inv-008",
+    sku: "LMP-20",
+    producto: "Limpador Multiusos 20L",
+    categoria: "Limpieza",
+    sucursalId: 2,
+    stock: 18,
+    minimo: 25,
+    rotacion: "baja",
+  },
+  {
+    id: "inv-009",
+    sku: "DET-05",
+    producto: "Detergente Industrial 5kg",
+    categoria: "Limpieza",
+    sucursalId: 3,
+    stock: 22,
+    minimo: 28,
+    rotacion: "media",
+  },
+]
+
+export const clientDebts: DebtRecord[] = [
+  { id: "cxc-001", nombre: "Supermercado El Centro", monto: 14500, diasVencidos: 12, sucursalId: 1 },
+  { id: "cxc-002", nombre: "Distribuidora Bella Vista", monto: 18200, diasVencidos: 5, sucursalId: 1 },
+  { id: "cxc-003", nombre: "Retail Express Zona 11", monto: 9800, diasVencidos: 25, sucursalId: 2 },
+  { id: "cxc-004", nombre: "Restaurante El Mirador", monto: 12600, diasVencidos: 18, sucursalId: 2 },
+  { id: "cxc-005", nombre: "Mercadito La Colonia", monto: 8400, diasVencidos: 8, sucursalId: 3 },
+  { id: "cxc-006", nombre: "Cafetería Aurora", monto: 6200, diasVencidos: 32, sucursalId: 3 },
+]
+
+export const supplierDebts: DebtRecord[] = [
+  { id: "cxp-001", nombre: "Molinos del Norte", monto: 12200, diasVencidos: 10, sucursalId: 1 },
+  { id: "cxp-002", nombre: "Aceites Corona", monto: 9600, diasVencidos: 4, sucursalId: 1 },
+  { id: "cxp-003", nombre: "Azucarera Nacional", monto: 18700, diasVencidos: 16, sucursalId: 2 },
+  { id: "cxp-004", nombre: "Cooperativa Agrícola GT", monto: 13400, diasVencidos: 22, sucursalId: 2 },
+  { id: "cxp-005", nombre: "Importadora La Merced", monto: 7200, diasVencidos: 6, sucursalId: 3 },
+  { id: "cxp-006", nombre: "Alimentos del Valle", monto: 8100, diasVencidos: 14, sucursalId: 3 },
+]
+
+export const salesTransactions: ReportTransaction[] = [
+  {
+    id: "ven-001",
+    date: formatDate(new Date(today.getTime() - 3 * 86400000)),
+    sucursalId: 1,
+    referencia: "FAC-10021",
+    entidad: "Supermercado El Centro",
+    canal: "Mostrador",
+    estado: "Pagado",
+    monto: 8200,
+  },
+  {
+    id: "ven-002",
+    date: formatDate(new Date(today.getTime() - 5 * 86400000)),
+    sucursalId: 1,
+    referencia: "FAC-10022",
+    entidad: "Retail Express Zona 11",
+    canal: "eCommerce",
+    estado: "Pagado",
+    monto: 5600,
+  },
+  {
+    id: "ven-003",
+    date: formatDate(new Date(today.getTime() - 7 * 86400000)),
+    sucursalId: 2,
+    referencia: "FAC-10023",
+    entidad: "Distribuidora Bella Vista",
+    canal: "Mayorista",
+    estado: "Pendiente",
+    monto: 11200,
+  },
+  {
+    id: "ven-004",
+    date: formatDate(new Date(today.getTime() - 9 * 86400000)),
+    sucursalId: 2,
+    referencia: "FAC-10024",
+    entidad: "Restaurante El Mirador",
+    canal: "Mostrador",
+    estado: "Pagado",
+    monto: 4600,
+  },
+  {
+    id: "ven-005",
+    date: formatDate(new Date(today.getTime() - 11 * 86400000)),
+    sucursalId: 3,
+    referencia: "FAC-10025",
+    entidad: "Mercadito La Colonia",
+    canal: "Mayorista",
+    estado: "Pagado",
+    monto: 9100,
+  },
+  {
+    id: "ven-006",
+    date: formatDate(new Date(today.getTime() - 13 * 86400000)),
+    sucursalId: 3,
+    referencia: "FAC-10026",
+    entidad: "Cafetería Aurora",
+    canal: "Mostrador",
+    estado: "Pendiente",
+    monto: 4800,
+  },
+]
+
+export const purchaseTransactions: ReportTransaction[] = [
+  {
+    id: "com-001",
+    date: formatDate(new Date(today.getTime() - 2 * 86400000)),
+    sucursalId: 1,
+    referencia: "OC-9041",
+    entidad: "Molinos del Norte",
+    canal: "Proveedor",
+    estado: "Pagado",
+    monto: 6200,
+  },
+  {
+    id: "com-002",
+    date: formatDate(new Date(today.getTime() - 6 * 86400000)),
+    sucursalId: 1,
+    referencia: "OC-9042",
+    entidad: "Aceites Corona",
+    canal: "Proveedor",
+    estado: "Pendiente",
+    monto: 4100,
+  },
+  {
+    id: "com-003",
+    date: formatDate(new Date(today.getTime() - 8 * 86400000)),
+    sucursalId: 2,
+    referencia: "OC-9043",
+    entidad: "Azucarera Nacional",
+    canal: "Proveedor",
+    estado: "Vencido",
+    monto: 7800,
+  },
+  {
+    id: "com-004",
+    date: formatDate(new Date(today.getTime() - 10 * 86400000)),
+    sucursalId: 2,
+    referencia: "OC-9044",
+    entidad: "Cooperativa Agrícola GT",
+    canal: "Proveedor",
+    estado: "Pendiente",
+    monto: 5600,
+  },
+  {
+    id: "com-005",
+    date: formatDate(new Date(today.getTime() - 12 * 86400000)),
+    sucursalId: 3,
+    referencia: "OC-9045",
+    entidad: "Importadora La Merced",
+    canal: "Proveedor",
+    estado: "Pagado",
+    monto: 3800,
+  },
+  {
+    id: "com-006",
+    date: formatDate(new Date(today.getTime() - 14 * 86400000)),
+    sucursalId: 3,
+    referencia: "OC-9046",
+    entidad: "Alimentos del Valle",
+    canal: "Proveedor",
+    estado: "Pendiente",
+    monto: 4200,
+  },
+]
+
+export const creditRecords: CreditRecord[] = [
+  {
+    id: "cre-001",
+    date: formatDate(new Date(today.getTime() - 15 * 86400000)),
+    sucursalId: 1,
+    entidad: "Supermercado El Centro",
+    tipo: "cliente",
+    monto: 15200,
+    estado: "Vencido",
+    diasVencidos: 22,
+  },
+  {
+    id: "cre-002",
+    date: formatDate(new Date(today.getTime() - 4 * 86400000)),
+    sucursalId: 1,
+    entidad: "Distribuidora Bella Vista",
+    tipo: "cliente",
+    monto: 9400,
+    estado: "Al día",
+    diasVencidos: 0,
+  },
+  {
+    id: "cre-003",
+    date: formatDate(new Date(today.getTime() - 9 * 86400000)),
+    sucursalId: 2,
+    entidad: "Molinos del Norte",
+    tipo: "proveedor",
+    monto: 7300,
+    estado: "Parcial",
+    diasVencidos: 7,
+  },
+  {
+    id: "cre-004",
+    date: formatDate(new Date(today.getTime() - 13 * 86400000)),
+    sucursalId: 2,
+    entidad: "Restaurante El Mirador",
+    tipo: "cliente",
+    monto: 6400,
+    estado: "Vencido",
+    diasVencidos: 15,
+  },
+  {
+    id: "cre-005",
+    date: formatDate(new Date(today.getTime() - 5 * 86400000)),
+    sucursalId: 3,
+    entidad: "Importadora La Merced",
+    tipo: "proveedor",
+    monto: 5300,
+    estado: "Al día",
+    diasVencidos: 0,
+  },
+  {
+    id: "cre-006",
+    date: formatDate(new Date(today.getTime() - 11 * 86400000)),
+    sucursalId: 3,
+    entidad: "Mercadito La Colonia",
+    tipo: "cliente",
+    monto: 8100,
+    estado: "Parcial",
+    diasVencidos: 4,
+  },
+]
