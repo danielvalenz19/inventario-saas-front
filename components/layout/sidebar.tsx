@@ -14,11 +14,13 @@ import {
   UserCog,
   Settings,
   Sparkles,
+  Store,
   Zap,
 } from "lucide-react"
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "POS", href: "/pos", icon: Store },
   { name: "Inventario", href: "/inventario", icon: Package },
   { name: "Créditos Clientes", href: "/creditos-clientes", icon: Users },
   { name: "Créditos Proveedores", href: "/creditos-proveedores", icon: Building2 },
