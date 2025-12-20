@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Bell, Search, ChevronDown, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,8 +14,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { clearAuthCookie } from "@/lib/auth"
 
 export function TopBar() {
+  const router = useRouter()
+
+  const handleLogout = () => {
+    clearAuthCookie()
+    router.replace("/login")
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-xl">
       {/* Search - Enhanced styling */}
@@ -71,7 +80,10 @@ export function TopBar() {
             <DropdownMenuItem className="focus:bg-muted">Perfil</DropdownMenuItem>
             <DropdownMenuItem className="focus:bg-muted">Preferencias</DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border/50" />
-            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+            <DropdownMenuItem
+              className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+              onClick={handleLogout}
+            >
               Cerrar sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
