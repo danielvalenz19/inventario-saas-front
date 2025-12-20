@@ -14,14 +14,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { clearAuthCookie } from "@/lib/auth"
+import { clearAccessTokenClient } from "@/lib/auth"
+import { apiLogout } from "@/lib/api/auth"
 
 export function TopBar() {
   const router = useRouter()
 
-  const handleLogout = () => {
-    clearAuthCookie()
-    router.replace("/login")
+  const handleLogout = async () => {
+    try {
+      await apiLogout()
+    } catch {
+      // ignore logout API errors; we still clear local session
+    } finally {
+      clearAccessTokenClient()
+      router.replace("/login")
+    }
   }
 
   return (

@@ -6,39 +6,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  DEMO_CREDENTIALS,
-  hasAuthCookie,
-  isValidCredentials,
-  setAuthCookie,
-} from "@/lib/auth"
+import { apiLogin } from "@/lib/api/auth"
+import { getAccessTokenClient, setAccessTokenClient } from "@/lib/auth/token.client"
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (hasAuthCookie()) {
+    if (getAccessTokenClient()) {
       router.replace("/dashboard")
     }
   }, [router])
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setError("")
+    setError(null)
     setSubmitting(true)
 
-    if (isValidCredentials(email, password)) {
-      setAuthCookie()
+    try {
+      const { accessToken } = await apiLogin(email, password)
+      setAccessTokenClient(accessToken)
       router.replace("/dashboard")
-      return
+    } catch (err: any) {
+      const status = err?.response?.status
+      if (status === 400 || status === 401) {
+        setError("Correo o contraseña incorrectos.")
+      } else {
+        setError(err?.message ?? "No se pudo iniciar sesión")
+      }
+    } finally {
+      setSubmitting(false)
     }
-
-    setSubmitting(false)
-    setError("Correo o contraseña incorrectos.")
   }
 
   return (
@@ -107,9 +109,6 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full" disabled={submitting}>
                   {submitting ? "Validando..." : "Entrar al panel"}
                 </Button>
-                <div className="rounded-lg border border-dashed border-border/70 bg-muted/60 px-4 py-3 text-xs text-muted-foreground">
-                  Credenciales demo: {DEMO_CREDENTIALS.email} · {DEMO_CREDENTIALS.password}
-                </div>
               </form>
             </CardContent>
           </Card>

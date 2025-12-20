@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import { Sidebar } from "./sidebar"
 import { TopBar } from "./top-bar"
-import { hasAuthCookie } from "@/lib/auth"
+import { getAccessTokenClient } from "@/lib/auth"
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -16,7 +16,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const [authorized, setAuthorized] = useState(false)
 
   useEffect(() => {
-    if (hasAuthCookie()) {
+    if (getAccessTokenClient()) {
       setAuthorized(true)
       setChecked(true)
       return
